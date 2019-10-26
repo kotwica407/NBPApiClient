@@ -4,11 +4,11 @@ namespace NBPApiClient.ExchangeRatesReader
     {
         #region UriConsts
         public const string RequestUriStart = "http://api.nbp.pl/api/exchangerates/";
-        public const string Tables = "/tables";
-        public const string Rates = "/rates";
-        public const string TableA = "/a";
-        public const string TableB = "/b";
-        public const string TableC = "/c";
+        public const string Tables = "tables/";
+        public const string Rates = "rates/";
+        public const string TableA = "a/";
+        public const string TableB = "b/";
+        public const string TableC = "c/";
 
         #endregion
 
@@ -48,6 +48,7 @@ namespace NBPApiClient.ExchangeRatesReader
         public const string WonPoludniowoKoreanski = "KRW";
         public const string YuanChinski = "CNY";
         public const string SDR = "XDR";
+        
         #endregion
     }
 }

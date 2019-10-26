@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using NBPApiClient.ExchangeRatesReader;
 
 namespace NBPApiClient
 {
@@ -12,15 +13,11 @@ namespace NBPApiClient
         static void Main(string[] args)
         {
             //TODO Chcę zrobić analizę korelacji kursów różnych walut
-            ProcessRepositories().Wait();
-        }
-        private static async Task ProcessRepositories()
-        {
-
-            var stringTask = client.GetStringAsync("http://api.nbp.pl/api/exchangerates/tables/a/");
-
-            var msg = await stringTask;
-            Console.Write(msg);
+            //var exchangeRate = Utils.ReadExchangeRateForOneDay(Consts.DolarAmerykanski, new DateTime(2019, 10, 25));
+            var exchangeRatesForPeriod = 
+                Utils.ReadExchangeRatesForPeriod(Consts.DolarAmerykanski, new DateTime(2019, 10, 1), new DateTime(2019, 10, 25));
+            foreach(ExchangeRate rate in exchangeRatesForPeriod.Result)
+                Console.WriteLine(rate.Rate);
         }
     }
 }
