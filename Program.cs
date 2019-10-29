@@ -9,8 +9,6 @@ namespace NBPApiClient
 {
     class Program
     {
-        private static readonly HttpClient client = new HttpClient();
-
         static void Main(string[] args)
         {
             //var exchangeRate = Utils.ReadExchangeRateForOneDay(Consts.DolarAmerykanski, new DateTime(2019, 10, 25));
