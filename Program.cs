@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using NBPApiClient.ExchangeRatesReader;
+using NBPApiClient.TechnicalAnalysis;
 using System.Linq;
 
 namespace NBPApiClient
@@ -20,6 +21,8 @@ namespace NBPApiClient
                 ExecuteWithNoArguments();
             else if(args[0] == "save")
                 ExecuteSavingTask(args[1]);
+            else if(args[0] == "average")
+                ExecuteCalculateMovingAverageTask(args[1]);
             else
                 ExecuteWithArguments(args);
             
@@ -63,6 +66,17 @@ namespace NBPApiClient
                     DateTime.Today.AddYears(-1), DateTime.Today);
             FileOperations
                 .SaveExchangeRateToCsv(@"SavedFiles\" + currency + @".csv", rates.Result);
+        }
+
+        private static void ExecuteCalculateMovingAverageTask(string currency)
+        {
+            var rates = 
+                Utils.ReadExchangeRatesForPeriod(currency, 
+                    DateTime.Today.AddYears(-1), DateTime.Today);
+            FileOperations
+                .SaveExchangeRateToCsv(
+                    @"SavedFiles\" + currency + @"MovingAverage.csv", 
+                    Averages.MovingAverage(rates.Result, 20));
         }
     }
 }
