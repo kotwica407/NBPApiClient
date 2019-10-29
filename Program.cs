@@ -12,17 +12,16 @@ namespace NBPApiClient
     {
         static void Main(string[] args)
         {
-            //var exchangeRate = Utils.ReadExchangeRateForOneDay(Consts.DolarAmerykanski, new DateTime(2019, 10, 25));
-            //var exchangeRatesForPeriod = 
-            //    Utils.ReadExchangeRatesForPeriod(Consts.DolarAmerykanski, new DateTime(2019, 10, 1), new DateTime(2019, 10, 25));
-            //foreach(ExchangeRate rate in exchangeRatesForPeriod.Result)
-            //    Console.WriteLine(rate.Rate);
             if(args.Length == 0)
                 ExecuteWithNoArguments();
             else if(args[0] == "save")
                 ExecuteSavingTask(args[1]);
-            else if(args[0] == "average")
+            else if(args[0] == "average1")
                 ExecuteCalculateMovingAverageTask(args[1]);
+            else if(args[0] == "average2")
+                ExecuteCalculateExponentialAverageTask(args[1]);
+            else if(args[0] == "MACD")
+                ExecuteCalculateMACDTask(args[1]);
             else
                 ExecuteWithArguments(args);
             
@@ -67,7 +66,6 @@ namespace NBPApiClient
             FileOperations
                 .SaveExchangeRateToCsv(@"SavedFiles\" + currency + @".csv", rates.Result);
         }
-
         private static void ExecuteCalculateMovingAverageTask(string currency)
         {
             var rates = 
@@ -77,6 +75,26 @@ namespace NBPApiClient
                 .SaveExchangeRateToCsv(
                     @"SavedFiles\" + currency + @"MovingAverage.csv", 
                     Averages.MovingAverage(rates.Result, 20));
+        }
+        private static void ExecuteCalculateExponentialAverageTask(string currency)
+        {
+            var rates = 
+                Utils.ReadExchangeRatesForPeriod(currency, 
+                    DateTime.Today.AddYears(-1), DateTime.Today);
+            FileOperations
+                .SaveExchangeRateToCsv(
+                    @"SavedFiles\" + currency + @"ExponentialAverage.csv", 
+                    Averages.ExponentialAverage(rates.Result, 20, 0.9));
+        }
+        private static void ExecuteCalculateMACDTask(string currency)
+        {
+            var rates = 
+                Utils.ReadExchangeRatesForPeriod(currency, 
+                    DateTime.Today.AddYears(-1), DateTime.Today);
+            FileOperations
+                .SaveExchangeRateToCsv(
+                    @"SavedFiles\" + currency + @"MACD.csv", 
+                    MACD.CalculateMACD(rates.Result));
         }
     }
 }
